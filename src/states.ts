@@ -1,6 +1,6 @@
 import { atom } from "jotai";
 import { atomWithReset } from "jotai/utils";
-import { concat, constant, range, times } from "lodash-es";
+import { constant, times } from "lodash-es";
 
 type WorldCell = {
   type: "none" | "gold" | "wumpus" | "pitch" | "wall";
@@ -38,6 +38,46 @@ export const playerData = atom<PlayerData>({
   direction: "E",
   gold: 0,
   arrow: 2,
+});
+
+export const lastPercept = atom({
+  bump: false,
+  scream: false,
+});
+
+export const playerPercept = atom((get) => {
+  const { x, y } = get(playerData);
+  const world = get(worldData);
+  const last = get(lastPercept);
+
+  const percept = {
+    breeze: false,
+    glitter: false,
+    stench: false,
+    ...last,
+  };
+
+  if (world[y][x].type === "gold") {
+    percept.glitter = true;
+  }
+
+  for (const [dy, dx] of [
+    [0, 1],
+    [1, 0],
+    [0, -1],
+    [0, 1],
+  ]) {
+    const ny = y + dy;
+    const nx = x + dx;
+
+    if (world[ny][nx].type === "wumpus") {
+      percept.stench = true;
+    } else if (world[ny][nx].type === "pitch") {
+      percept.breeze = true;
+    }
+  }
+
+  return percept;
 });
 
 export type PlayerAction = [

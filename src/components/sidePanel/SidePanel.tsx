@@ -1,5 +1,7 @@
 import { ButtonHTMLAttributes } from "react";
 import { useGame } from "../../control/useGame";
+import { useAtomValue } from "jotai";
+import { playerPercept } from "../../states";
 
 const actions = [
   "GoForward",
@@ -12,11 +14,15 @@ const actions = [
 
 export function SidePanel() {
   const { runAgent, reset, processAction } = useGame();
+  const percept = useAtomValue(playerPercept);
 
   return (
     <div className="flex flex-col">
       <Button onClick={runAgent}>gogo</Button>
       <Button onClick={reset}>Reset</Button>
+      <div className="whitespace-pre-wrap">
+        {JSON.stringify(percept, null, 2)}
+      </div>
       <div className="flex flex-wrap">
         {actions.map((action, idx) => (
           <Button key={action} onClick={() => processAction(action)}>

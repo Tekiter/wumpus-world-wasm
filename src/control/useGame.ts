@@ -7,6 +7,7 @@ import {
   worldData,
   worldDiscovered,
   PlayerAction,
+  lastPercept,
 } from "../states";
 
 const dirCycle = ["E", "S", "W", "N"] as const;
@@ -24,6 +25,7 @@ export function useGame() {
   const [discovered, setDiscovered] = useAtom(worldDiscovered);
   const resetDiscovered = useResetAtom(worldDiscovered);
   const [player, setPlayer] = useAtom(playerData);
+  const [, setLast] = useAtom(lastPercept);
 
   function runAgent() {
     const nextAction = agent.run({
@@ -38,12 +40,18 @@ export function useGame() {
   }
 
   function processAction(action: PlayerAction) {
+    setLast({
+      bump: false,
+      scream: false,
+    });
+
     if (action === "GoForward") {
       const [dy, dx] = dirNext[player.direction];
       const ny = player.y + dy;
       const nx = player.x + dx;
 
       if (world[ny][nx].type === "wall") {
+        setLast((last) => ({ ...last, bump: true }));
         return;
       }
 
