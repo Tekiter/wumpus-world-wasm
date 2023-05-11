@@ -1,28 +1,16 @@
-import { useEffect } from "react";
+import { useAtom } from "jotai";
 import "./App.css";
-import init, { vmStore } from "./rustpython/rustpython_wasm";
-import wasmUrl from "./rustpython/rustpython_wasm_bg.wasm?url";
-import mainpy from "./pysrc/main.py?raw";
-import * as agent from "./agent";
+import { useAgent } from "./agent";
+import { worldData } from "./states";
 
 function App() {
-  useEffect(() => {
-    init(wasmUrl).then(() => {
-      const vm = vmStore.init("webpy");
-      vm.setStdout(console.log);
-
-      vm.injectJSModule("agent", agent);
-
-      vm.exec(mainpy);
-
-      vm.destroy();
-    });
-  }, []);
+  const agent = useAgent();
+  const [world, setWorld] = useAtom(worldData);
 
   return (
-    <>
-      <div></div>
-    </>
+    <div>
+      <button onClick={() => agent.run(world)}>gogo</button>
+    </div>
   );
 }
 

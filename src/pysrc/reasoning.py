@@ -1,4 +1,0 @@
-
-def reasoning(r):
-    
-    pass
