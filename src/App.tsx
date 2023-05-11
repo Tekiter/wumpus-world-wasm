@@ -1,14 +1,18 @@
 import { SidePanel } from "./components/sidePanel/SidePanel";
-import { Canvas } from "./components/visual/Canvas";
+import { Renderer } from "./components/renderer/Renderer";
 
 function App() {
   return (
-    <div className="flex">
-      <div className="grow">
-        <Canvas />
-      </div>
-      <div className="shrink-0">
-        <SidePanel />
+    <div className="absolute inset-0">
+      <div className="flex justify-stretch h-full">
+        <div className="grow shrink h-full relative">
+          <div className="bg-stone-300 absolute inset-0">
+            <Renderer />
+          </div>
+        </div>
+        <div className="shrink-0 w-96">
+          <SidePanel />
+        </div>
       </div>
     </div>
   );
