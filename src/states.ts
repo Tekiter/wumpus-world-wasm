@@ -40,7 +40,7 @@ export const playerData = atom<PlayerData>({
   arrow: 2,
 });
 
-export const lastPercept = atom({
+export const lastEvent = atom({
   bump: false,
   scream: false,
 });
@@ -48,13 +48,14 @@ export const lastPercept = atom({
 export const playerPercept = atom((get) => {
   const { x, y } = get(playerData);
   const world = get(worldData);
-  const last = get(lastPercept);
+  const last = get(lastEvent);
 
   const percept = {
     breeze: false,
     glitter: false,
     stench: false,
-    ...last,
+    bump: last.bump,
+    scream: last.scream,
   };
 
   if (world[y][x].type === "gold") {

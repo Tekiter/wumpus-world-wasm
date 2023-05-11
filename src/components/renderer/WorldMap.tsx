@@ -21,13 +21,39 @@ export function WorldMap() {
             );
           }
 
-          return (
-            <mesh key={`${x}${y}`} position={[xPos, 1 + 0.5, yPos]}>
-              <boxGeometry args={[CELL_SIZE, 1, CELL_SIZE]} />
-              <meshStandardMaterial
-                color={discovered[y][x] ? "#c9c9c9" : "#6c6c6c"}
-              />
+          const wumpus = (
+            <mesh position={[0, 1, 0]}>
+              <boxGeometry args={[1, 1, 1]} />
+              <meshStandardMaterial color={"red"} />
             </mesh>
+          );
+
+          const pitch = (
+            <mesh position={[0, 1, 0]} castShadow>
+              <boxGeometry args={[1, 1, 1]} />
+              <meshStandardMaterial color={"blue"} />
+            </mesh>
+          );
+
+          const gold = (
+            <mesh position={[0, 1, 0]} castShadow>
+              <boxGeometry args={[1, 1, 1]} />
+              <meshStandardMaterial color={"yellow"} />
+            </mesh>
+          );
+
+          return (
+            <group key={`${x}${y}`} position={[xPos, 1 + 0.5, yPos]}>
+              <mesh receiveShadow>
+                <boxGeometry args={[CELL_SIZE, 1, CELL_SIZE]} />
+                <meshStandardMaterial
+                  color={discovered[y][x] ? "#c9c9c9" : "#6c6c6c"}
+                />
+              </mesh>
+              {cell.type === "wumpus" && wumpus}
+              {cell.type === "pitch" && pitch}
+              {cell.type === "gold" && gold}
+            </group>
           );
         })
       )}

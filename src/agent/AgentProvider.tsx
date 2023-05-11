@@ -10,9 +10,14 @@ interface AgentProviderProps {
   children: ReactNode;
 }
 
+interface PlayerEvent {
+  dead: boolean;
+}
+
 export function AgentProvider({ children }: AgentProviderProps) {
   const pyVm = usePyVm();
   const agentMemory = useRef<unknown>(undefined);
+  const isLastDead = useRef<boolean>(false);
 
   function runAgent(percept: Percept) {
     if (!pyVm) {
@@ -63,11 +68,19 @@ export function AgentProvider({ children }: AgentProviderProps) {
         const newMemory = convertToObj(memory);
         agentMemory.current = newMemory;
       },
+      isLastDead() {
+        return isLastDead.current;
+      },
     } satisfies Bridge);
 
     pyVm.exec(mainpy);
+    isLastDead.current = false;
 
     return receivedAction;
+  }
+
+  function dead() {
+    isLastDead.current = true;
   }
 
   function resetMemory() {
@@ -78,6 +91,7 @@ export function AgentProvider({ children }: AgentProviderProps) {
     <AgentContext.Provider
       value={{
         run: runAgent,
+        dead,
         resetMemory,
       }}
     >

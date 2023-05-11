@@ -1,4 +1,4 @@
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { useResetAtom } from "jotai/utils";
 import { cloneDeep, range } from "lodash-es";
 import { useAgent } from "../agent/useAgent";
@@ -7,7 +7,8 @@ import {
   worldData,
   worldDiscovered,
   PlayerAction,
-  lastPercept,
+  lastEvent,
+  playerPercept,
 } from "../states";
 
 const dirCycle = ["E", "S", "W", "N"] as const;
@@ -25,16 +26,11 @@ export function useGame() {
   const [discovered, setDiscovered] = useAtom(worldDiscovered);
   const resetDiscovered = useResetAtom(worldDiscovered);
   const [player, setPlayer] = useAtom(playerData);
-  const [, setLast] = useAtom(lastPercept);
+  const [, setLast] = useAtom(lastEvent);
+  const percept = useAtomValue(playerPercept);
 
   function runAgent() {
-    const nextAction = agent.run({
-      breeze: false,
-      bump: false,
-      glitter: false,
-      scream: false,
-      stench: false,
-    });
+    const nextAction = agent.run(percept);
 
     processAction(nextAction);
   }
@@ -55,16 +51,42 @@ export function useGame() {
         return;
       }
 
-      setPlayer((player) => ({
-        ...player,
-        y: ny,
-        x: nx,
-      }));
       setDiscovered((discovered) => {
         const newDiscovered = cloneDeep(discovered);
         newDiscovered[ny][nx] = true;
         return newDiscovered;
       });
+
+      if (world[ny][nx].type === "wumpus" || world[ny][nx].type === "pitch") {
+        setPlayer((player) => ({
+          ...player,
+          x: 1,
+          y: 1,
+          gold: 0,
+          direction: "E",
+          arrow: 2,
+        }));
+        agent.dead();
+        return;
+      }
+
+      if (world[ny][nx].type === "gold") {
+        setPlayer((player) => ({
+          ...player,
+          gold: 1,
+        }));
+        setWorld((world) => {
+          const newWorld = cloneDeep(world);
+          newWorld[ny][nx].type = "none";
+          return newWorld;
+        });
+      }
+
+      setPlayer((player) => ({
+        ...player,
+        y: ny,
+        x: nx,
+      }));
     } else if (action === "TurnLeft") {
       setPlayer((player) => {
         const didx = dirCycle.indexOf(player.direction);
@@ -106,7 +128,7 @@ export function useGame() {
         })
       );
 
-      world[4][4] = { type: "gold" };
+      newWorld[4][4] = { type: "gold" };
 
       return newWorld;
     });

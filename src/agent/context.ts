@@ -4,6 +4,7 @@ import { PlayerAction } from "../states";
 
 interface AgentContext {
   run(percept: Percept): PlayerAction;
+  dead(): void;
   resetMemory(): void;
 }
 

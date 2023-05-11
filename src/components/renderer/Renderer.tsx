@@ -1,18 +1,9 @@
-import { useAtom } from "jotai";
-import { worldData } from "../../states";
 import { Canvas } from "@react-three/fiber";
-import {
-  BakeShadows,
-  Bounds,
-  OrbitControls,
-  RoundedBox,
-} from "@react-three/drei";
+import { BakeShadows, Bounds, OrbitControls } from "@react-three/drei";
 import { WorldMap } from "./WorldMap";
 import { Player } from "./Player";
 
 export function Renderer() {
-  const world = useAtom(worldData);
-
   return (
     <Canvas dpr={[1, 2]} camera={{ position: [20, 20, 20] }} shadows>
       <color attach="background" args={["#252530"]} />

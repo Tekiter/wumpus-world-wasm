@@ -13,11 +13,11 @@ export function Player() {
       position={[xPos, 2, yPos]}
       rotation={[0, (Math.PI / 2) * -dirCycle.indexOf(player.direction), 0]}
     >
-      <mesh>
+      <mesh castShadow>
         <boxGeometry args={[4, 1, 1]} />
         <meshStandardMaterial color="#38c168" />
       </mesh>
-      <mesh position={[1, 0, 0]}>
+      <mesh position={[1, 0, 0]} castShadow>
         <boxGeometry args={[2, 2, 2]} />
         <meshStandardMaterial color="#38c168" />
       </mesh>
