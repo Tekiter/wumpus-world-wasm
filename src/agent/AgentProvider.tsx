@@ -1,17 +1,17 @@
-import { ReactNode, createContext, useContext, useRef } from "react";
-import mainpy from "./pysrc/main.py?raw";
-import { Bridge, Percept } from "./bridge";
-import { usePyVm } from "./PyVm";
+import { ReactNode, createContext, useRef } from "react";
+import { Bridge, Percept } from "../bridge";
+import { usePyVm } from "../pyVm/usePyVm";
+import { mainpy } from "../pysrc";
 
 interface AgentContext {
   run(percept: Percept): string;
   resetMemory(): void;
 }
 
-const AgentContext = createContext<AgentContext>(
+export const AgentContext = createContext<AgentContext>(
   new Proxy({} as AgentContext, {
     get() {
-      throw new Error("Not defined");
+      throw new Error("Agent context defined");
     },
   })
 );
@@ -82,8 +82,4 @@ export function AgentProvider({ children }: AgentProviderProps) {
       {children}
     </AgentContext.Provider>
   );
-}
-
-export function useAgent() {
-  return useContext(AgentContext);
 }

@@ -1,19 +1,13 @@
-import {
-  ReactNode,
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { ReactNode, createContext, useEffect, useState } from "react";
 import init, { VirtualMachine, vmStore } from "./rustpython/rustpython_wasm";
 import wasmUrl from "./rustpython/rustpython_wasm_bg.wasm?url";
-import agentpy from "./pysrc/agent.py?raw";
+import agentpy from "../pysrc/agent.py?raw";
 
 interface PyVmContext {
   vm: VirtualMachine | null;
 }
 
-const PyVmContext = createContext<VirtualMachine | null>(null);
+export const PyVmContext = createContext<VirtualMachine | null>(null);
 
 interface PyVmProviderProps {
   children: ReactNode;
@@ -44,8 +38,4 @@ export function PyVmProvider({ children }: PyVmProviderProps) {
   }, []);
 
   return <PyVmContext.Provider value={pyVm}>{children}</PyVmContext.Provider>;
-}
-
-export function usePyVm() {
-  return useContext(PyVmContext);
 }

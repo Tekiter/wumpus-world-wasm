@@ -1,6 +1,6 @@
 import { useAtom } from "jotai";
-import { useAgent } from "./agent";
 import { worldData } from "./states";
+import { useAgent } from "./agent/useAgent";
 
 function App() {
   const agent = useAgent();
