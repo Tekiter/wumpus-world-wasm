@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useContext } from "react";
+import { ReactNode, createContext, useContext, useRef } from "react";
 import mainpy from "./pysrc/main.py?raw";
 import { Bridge } from "./bridge";
 import { World } from "./states";
@@ -6,6 +6,7 @@ import { usePyVm } from "./PyVm";
 
 interface AgentContext {
   run(world: World): string;
+  resetMemory(): void;
 }
 
 const AgentContext = createContext<AgentContext>(
@@ -22,8 +23,9 @@ interface AgentProviderProps {
 
 export function AgentProvider({ children }: AgentProviderProps) {
   const pyVm = usePyVm();
+  const agentMemory = useRef<unknown>(undefined);
 
-  function runAgent(world: World) {
+  function runAgent() {
     if (!pyVm) {
       throw new Error("Agent not set");
     }
@@ -31,14 +33,21 @@ export function AgentProvider({ children }: AgentProviderProps) {
     let receivedAction = "";
 
     pyVm.injectJSModule("bridge", {
-      getWorld() {
-        return world;
-      },
       sendAction(action) {
         if (typeof action === "string") {
           receivedAction = action;
         }
         console.log(action);
+      },
+      getMemory() {
+        return agentMemory.current;
+      },
+      setMemory(memory: unknown) {
+        if (!(memory instanceof Map)) {
+          throw new Error("Something wrong.");
+        }
+        const newMemory = Object.fromEntries(memory);
+        agentMemory.current = newMemory;
       },
     } satisfies Bridge);
 
@@ -47,10 +56,15 @@ export function AgentProvider({ children }: AgentProviderProps) {
     return receivedAction;
   }
 
+  function resetMemory() {
+    agentMemory.current = {};
+  }
+
   return (
     <AgentContext.Provider
       value={{
         run: runAgent,
+        resetMemory,
       }}
     >
       {children}

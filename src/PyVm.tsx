@@ -27,7 +27,7 @@ export function PyVmProvider({ children }: PyVmProviderProps) {
 
     init(wasmUrl).then(() => {
       vm = vmStore.init("webpy");
-      vm.setStdout(console.log);
+      vm.setStdout((str: unknown) => console.log("[PythonOutput]:", str));
       vm.addToScope("__name__", "__main__");
 
       vm.injectModule("agent", agentpy);
