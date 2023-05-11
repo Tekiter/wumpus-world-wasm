@@ -1,20 +1,8 @@
-import { ReactNode, createContext, useRef } from "react";
+import { ReactNode, useRef } from "react";
 import { Bridge, Percept } from "../bridge";
 import { usePyVm } from "../pyVm/usePyVm";
 import { mainpy } from "../pysrc";
-
-interface AgentContext {
-  run(percept: Percept): string;
-  resetMemory(): void;
-}
-
-export const AgentContext = createContext<AgentContext>(
-  new Proxy({} as AgentContext, {
-    get() {
-      throw new Error("Agent context defined");
-    },
-  })
-);
+import { AgentContext } from "./context";
 
 interface AgentProviderProps {
   children: ReactNode;
@@ -36,7 +24,6 @@ export function AgentProvider({ children }: AgentProviderProps) {
         if (typeof action === "string") {
           receivedAction = action;
         }
-        console.log(action);
       },
       getPercept() {
         return percept;
