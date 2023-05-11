@@ -11,7 +11,7 @@ export function Player() {
   return (
     <group
       position={[xPos, 2, yPos]}
-      rotation={[0, (Math.PI / 2) * dirCycle.indexOf(player.direction), 0]}
+      rotation={[0, (Math.PI / 2) * -dirCycle.indexOf(player.direction), 0]}
     >
       <mesh>
         <boxGeometry args={[4, 1, 1]} />
