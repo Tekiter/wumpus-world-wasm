@@ -44,9 +44,19 @@ export function AgentProvider({ children }: AgentProviderProps) {
       },
       setMemory(memory: unknown) {
         if (!(memory instanceof Map)) {
-          throw new Error("Something wrong.");
+          throw new Error("Cannot save memory.");
         }
-        const newMemory = Object.fromEntries(memory);
+
+        function convertToObj(o: unknown): unknown {
+          if (o instanceof Map) {
+            return Object.fromEntries(
+              [...o.entries()].map(([k, v]) => [k, convertToObj(v)])
+            );
+          }
+          return o;
+        }
+
+        const newMemory = convertToObj(memory);
         agentMemory.current = newMemory;
       },
     } satisfies Bridge);
