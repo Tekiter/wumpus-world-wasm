@@ -16,4 +16,20 @@ export const worldData = atom<World>(
   )
 );
 
+type PlayerData = {
+  x: number;
+  y: number;
+  direction: "N" | "E" | "W" | "S";
+  gold: number;
+  arrow: number;
+};
+
+export const playerData = atom<PlayerData>({
+  x: 1,
+  y: 1,
+  direction: "E",
+  gold: 0,
+  arrow: 2,
+});
+
 export const actionQueue = atom<string[]>([]);

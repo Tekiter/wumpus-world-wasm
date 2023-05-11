@@ -1,26 +1,15 @@
-import { useAtom } from "jotai";
-import { worldData } from "./states";
-import { useAgent } from "./agent/useAgent";
+import { SidePanel } from "./components/sidePanel/SidePanel";
+import { Canvas } from "./components/visual/Canvas";
 
 function App() {
-  const agent = useAgent();
-  const [world, setWorld] = useAtom(worldData);
-
   return (
-    <div>
-      <button
-        onClick={() =>
-          agent.run({
-            breeze: false,
-            bump: false,
-            glitter: false,
-            scream: false,
-            stench: false,
-          })
-        }
-      >
-        gogo
-      </button>
+    <div className="flex">
+      <div className="grow">
+        <Canvas />
+      </div>
+      <div className="shrink-0">
+        <SidePanel />
+      </div>
     </div>
   );
 }
