@@ -8,6 +8,7 @@ import {
   RoundedBox,
 } from "@react-three/drei";
 import { WorldMap } from "./WorldMap";
+import { Player } from "./Player";
 
 export function Renderer() {
   const world = useAtom(worldData);
@@ -33,6 +34,7 @@ export function Renderer() {
         {/* <RoundedBox args={[10, 10, 10]} position={[0, 0, 0]} receiveShadow>
           <meshStandardMaterial roughness={1} opacity={1} color="#D6DBE0" />
         </RoundedBox> */}
+        <Player />
       </Bounds>
 
       <BakeShadows />
