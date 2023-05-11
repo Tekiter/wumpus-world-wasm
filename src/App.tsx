@@ -1,5 +1,4 @@
 import { useAtom } from "jotai";
-import "./App.css";
 import { useAgent } from "./agent";
 import { worldData } from "./states";
 
