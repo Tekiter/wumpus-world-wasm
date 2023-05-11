@@ -3,6 +3,8 @@ import { Bridge, Percept } from "../bridge";
 import { usePyVm } from "../pyVm/usePyVm";
 import { mainpy } from "../pysrc";
 import { AgentContext } from "./context";
+import { z } from "zod";
+import { PlayerAction } from "../states";
 
 interface AgentProviderProps {
   children: ReactNode;
@@ -17,12 +19,25 @@ export function AgentProvider({ children }: AgentProviderProps) {
       throw new Error("Agent not set");
     }
 
-    let receivedAction = "";
+    let receivedAction: PlayerAction = "None";
 
     pyVm.injectJSModule("bridge", {
       sendAction(action) {
-        if (typeof action === "string") {
-          receivedAction = action;
+        const actionSchema = z.union([
+          z.literal("GoForward"),
+          z.literal("TurnLeft"),
+          z.literal("TurnRight"),
+          z.literal("Grab"),
+          z.literal("Shoot"),
+          z.literal("Climb"),
+        ]);
+
+        const result = actionSchema.safeParse(action);
+
+        if (result.success) {
+          receivedAction = result.data;
+        } else {
+          throw new Error(`Invalid agent action: ${action}`);
         }
       },
       getPercept() {

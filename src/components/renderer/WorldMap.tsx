@@ -1,18 +1,6 @@
 import { useAtomValue } from "jotai";
 import { worldData, worldDiscovered } from "../../states";
-
-const CELL_SIZE = 5;
-const CELL_GAP = 0.5;
-
-function getGridPosition(y: number, x: number) {
-  const xPos = (x - 3 + 1 / 2) * (CELL_SIZE + CELL_GAP);
-  const yPos = (y - 3 + 1 / 2) * (CELL_SIZE + CELL_GAP);
-
-  return {
-    xPos,
-    yPos,
-  };
-}
+import { CELL_SIZE, getGridPosition } from "./position";
 
 export function WorldMap() {
   const world = useAtomValue(worldData);

@@ -1,8 +1,9 @@
 import { createContext } from "react";
 import { Percept } from "../bridge";
+import { PlayerAction } from "../states";
 
 interface AgentContext {
-  run(percept: Percept): string;
+  run(percept: Percept): PlayerAction;
   resetMemory(): void;
 }
 

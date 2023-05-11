@@ -47,10 +47,6 @@ export function Renderer() {
         enablePan={true}
         zoomSpeed={0.3}
       />
-      {/* <gridHelper
-        args={[1000, 200, "#151515", "#020202"]}
-        position={[0, -4, 0]}
-      /> */}
       <mesh
         scale={200}
         rotation={[-Math.PI / 2, 0, 0]}
@@ -60,8 +56,6 @@ export function Renderer() {
         <planeGeometry />
         <shadowMaterial transparent opacity={0.3} />
       </mesh>
-
-      <axesHelper />
     </Canvas>
   );
 }

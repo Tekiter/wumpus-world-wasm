@@ -12,5 +12,5 @@ def reasoning(memory, percept):
     print(memory)
     print("percept:", percept)
 
-    return "gogo"
+    return "GoForward"
     

@@ -1,13 +1,14 @@
 import { atom } from "jotai";
+import { atomWithReset } from "jotai/utils";
 import { concat, constant, range, times } from "lodash-es";
 
 type WorldCell = {
-  type: "none" | "gold" | "wumpus" | "breeze" | "wall";
+  type: "none" | "gold" | "wumpus" | "pitch" | "wall";
 };
 
 export type World = WorldCell[][];
 
-export const worldData = atom<World>([
+export const worldData = atomWithReset<World>([
   times(6, () => ({ type: "wall" as const })),
   ...times(4, () => [
     { type: "wall" as const },
@@ -19,7 +20,9 @@ export const worldData = atom<World>([
   times(6, () => ({ type: "wall" as const })),
 ]);
 
-export const worldDiscovered = atom(times(6, () => times(6, constant(false))));
+export const worldDiscovered = atomWithReset(
+  times(6, () => times(6, constant(false)))
+);
 
 type PlayerData = {
   x: number;
@@ -37,4 +40,14 @@ export const playerData = atom<PlayerData>({
   arrow: 2,
 });
 
-export const actionQueue = atom<string[]>([]);
+export type PlayerAction = [
+  "GoForward",
+  "TurnLeft",
+  "TurnRight",
+  "Grab",
+  "Shoot",
+  "Climb",
+  "None"
+][number];
+
+export const actionQueue = atom<PlayerAction[]>([]);
