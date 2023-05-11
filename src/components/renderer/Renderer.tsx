@@ -7,6 +7,7 @@ import {
   OrbitControls,
   RoundedBox,
 } from "@react-three/drei";
+import { WorldMap } from "./WorldMap";
 
 export function Renderer() {
   const world = useAtom(worldData);
@@ -18,7 +19,7 @@ export function Renderer() {
       <hemisphereLight intensity={0.125} color="#8040df" groundColor="red" />
       <spotLight
         castShadow
-        color="orange"
+        color="#d9dcc0"
         intensity={2}
         position={[-50, 50, 40]}
         angle={0.25}
@@ -28,9 +29,10 @@ export function Renderer() {
       />
 
       <Bounds fit clip observe margin={2}>
-        <RoundedBox args={[10, 10, 10]} position={[0, 0, 0]} receiveShadow>
+        <WorldMap />
+        {/* <RoundedBox args={[10, 10, 10]} position={[0, 0, 0]} receiveShadow>
           <meshStandardMaterial roughness={1} opacity={1} color="#D6DBE0" />
-        </RoundedBox>
+        </RoundedBox> */}
       </Bounds>
 
       <BakeShadows />
@@ -39,16 +41,16 @@ export function Renderer() {
         makeDefault
         minAzimuthAngle={0}
         maxAzimuthAngle={Math.PI / 2}
-        minPolarAngle={Math.PI / 3}
-        maxPolarAngle={Math.PI / 3}
+        minPolarAngle={(Math.PI * 1.5) / 6}
+        maxPolarAngle={(Math.PI * 1.5) / 6}
         enableZoom={true}
         enablePan={true}
         zoomSpeed={0.3}
       />
-      <gridHelper
+      {/* <gridHelper
         args={[1000, 200, "#151515", "#020202"]}
         position={[0, -4, 0]}
-      />
+      /> */}
       <mesh
         scale={200}
         rotation={[-Math.PI / 2, 0, 0]}
@@ -58,6 +60,8 @@ export function Renderer() {
         <planeGeometry />
         <shadowMaterial transparent opacity={0.3} />
       </mesh>
+
+      <axesHelper />
     </Canvas>
   );
 }

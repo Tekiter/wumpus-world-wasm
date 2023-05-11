@@ -1,20 +1,25 @@
 import { atom } from "jotai";
-import { range } from "lodash-es";
+import { concat, constant, range, times } from "lodash-es";
 
 type WorldCell = {
-  type: "none" | "gold" | "wumpus" | "breeze";
-  discovered: boolean;
+  type: "none" | "gold" | "wumpus" | "breeze" | "wall";
 };
+
 export type World = WorldCell[][];
 
-export const worldData = atom<World>(
-  range(4).map(() =>
-    range(4).map(() => ({
+export const worldData = atom<World>([
+  times(6, () => ({ type: "wall" as const })),
+  ...times(4, () => [
+    { type: "wall" as const },
+    ...times(4, () => ({
       type: "none" as const,
-      discovered: false,
-    }))
-  )
-);
+    })),
+    { type: "wall" as const },
+  ]),
+  times(6, () => ({ type: "wall" as const })),
+]);
+
+export const worldDiscovered = atom(times(6, () => times(6, constant(false))));
 
 type PlayerData = {
   x: number;
