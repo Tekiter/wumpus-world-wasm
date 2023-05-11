@@ -6,10 +6,11 @@ def initialize(memory):
     memory['obj'] = {'a':1}
     
 
-def reasoning(memory):
+def reasoning(memory, percept):
     memory["a"] += 1
 
     print(memory)
+    print("percept:", percept)
 
     return "gogo"
     

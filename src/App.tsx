@@ -9,7 +9,19 @@ function App() {
 
   return (
     <div>
-      <button onClick={() => agent.run(world)}>gogo</button>
+      <button
+        onClick={() =>
+          agent.run({
+            breeze: false,
+            bump: false,
+            glitter: false,
+            scream: false,
+            stench: false,
+          })
+        }
+      >
+        gogo
+      </button>
     </div>
   );
 }

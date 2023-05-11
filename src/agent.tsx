@@ -1,11 +1,10 @@
 import { ReactNode, createContext, useContext, useRef } from "react";
 import mainpy from "./pysrc/main.py?raw";
-import { Bridge } from "./bridge";
-import { World } from "./states";
+import { Bridge, Percept } from "./bridge";
 import { usePyVm } from "./PyVm";
 
 interface AgentContext {
-  run(world: World): string;
+  run(percept: Percept): string;
   resetMemory(): void;
 }
 
@@ -25,7 +24,7 @@ export function AgentProvider({ children }: AgentProviderProps) {
   const pyVm = usePyVm();
   const agentMemory = useRef<unknown>(undefined);
 
-  function runAgent() {
+  function runAgent(percept: Percept) {
     if (!pyVm) {
       throw new Error("Agent not set");
     }
@@ -38,6 +37,9 @@ export function AgentProvider({ children }: AgentProviderProps) {
           receivedAction = action;
         }
         console.log(action);
+      },
+      getPercept() {
+        return percept;
       },
       getMemory() {
         return agentMemory.current;
