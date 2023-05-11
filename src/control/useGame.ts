@@ -43,6 +43,10 @@ export function useGame() {
       const ny = player.y + dy;
       const nx = player.x + dx;
 
+      if (world[ny][nx].type === "wall") {
+        return;
+      }
+
       setPlayer((player) => ({
         ...player,
         y: ny,
