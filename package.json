@@ -13,6 +13,8 @@
     "@react-three/drei": "^9.67.1",
     "@react-three/fiber": "^8.13.0",
     "@types/three": "^0.152.0",
+    "framer-motion": "^10.12.10",
+    "framer-motion-3d": "^10.12.10",
     "jotai": "^2.1.0",
     "lodash-es": "^4.17.21",
     "react": "^18.2.0",
