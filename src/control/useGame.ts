@@ -70,18 +70,6 @@ export function useGame() {
         return;
       }
 
-      if (world[ny][nx].type === "gold") {
-        setPlayer((player) => ({
-          ...player,
-          gold: 1,
-        }));
-        setWorld((world) => {
-          const newWorld = cloneDeep(world);
-          newWorld[ny][nx].type = "none";
-          return newWorld;
-        });
-      }
-
       setPlayer((player) => ({
         ...player,
         y: ny,
@@ -99,6 +87,10 @@ export function useGame() {
         const nextDirection = dirCycle[(didx + 1) % 4];
         return { ...player, direction: nextDirection };
       });
+    } else if (action === "Grab") {
+      if (world[player.y][player.x].type === "gold") {
+        setPlayer((player) => ({ ...player, gold: 1 }));
+      }
     }
   }
 
