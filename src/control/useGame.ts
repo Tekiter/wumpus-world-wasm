@@ -152,7 +152,7 @@ export function useGame() {
       return newDiscovered;
     });
 
-    setGameState({ type: "running" });
+    setGameState({ type: "running", mode: "manual" });
   }
 
   return { runAgent, reset, processAction, player };
