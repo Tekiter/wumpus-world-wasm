@@ -10,10 +10,6 @@ interface AgentProviderProps {
   children: ReactNode;
 }
 
-interface PlayerEvent {
-  dead: boolean;
-}
-
 export function AgentProvider({ children }: AgentProviderProps) {
   const pyVm = usePyVm();
   const agentMemory = useRef<unknown>(undefined);

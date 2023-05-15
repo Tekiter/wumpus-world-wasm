@@ -1,9 +1,11 @@
 import { useAtomValue } from "jotai";
-import { playerData, worldData, worldDiscovered } from "../../states";
+import { playerData, removedWumpusAtom, worldDiscovered } from "../../states";
 import { CELL_SIZE, getGridPosition } from "./position";
+import { worldData } from "../../states/world";
 
 export function WorldMap() {
   const world = useAtomValue(worldData);
+  const removedWumpus = useAtomValue(removedWumpusAtom);
   const discovered = useAtomValue(worldDiscovered);
   const player = useAtomValue(playerData);
 
@@ -51,7 +53,9 @@ export function WorldMap() {
                   color={discovered[y][x] ? "#c9c9c9" : "#6c6c6c"}
                 />
               </mesh>
-              {cell.type === "wumpus" && wumpus}
+              {cell.type === "wumpus" &&
+                !removedWumpus.find((v) => v.y === y && v.x === x) &&
+                wumpus}
               {cell.type === "pitch" && pitch}
               {cell.type === "gold" && player.gold === 0 && gold}
             </group>

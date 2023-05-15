@@ -4,13 +4,14 @@ import { cloneDeep, range } from "lodash-es";
 import { useAgent } from "../agent/useAgent";
 import {
   playerData,
-  worldData,
   worldDiscovered,
   PlayerAction,
   lastEvent,
   playerPercept,
+  removedWumpusAtom,
 } from "../states";
 import { gameStateAtom } from "../states/game";
+import { worldData } from "../states/world";
 
 const dirCycle = ["E", "S", "W", "N"] as const;
 const dirNext = {
@@ -25,6 +26,7 @@ export function useGame() {
   const [world, setWorld] = useAtom(worldData);
   const resetWorld = useResetAtom(worldData);
   const [discovered, setDiscovered] = useAtom(worldDiscovered);
+  const [removedWumpus, setRemovedWumpus] = useAtom(removedWumpusAtom);
   const resetDiscovered = useResetAtom(worldDiscovered);
   const [player, setPlayer] = useAtom(playerData);
   const [, setLast] = useAtom(lastEvent);
@@ -63,7 +65,11 @@ export function useGame() {
         return newDiscovered;
       });
 
-      if (world[ny][nx].type === "wumpus" || world[ny][nx].type === "pitch") {
+      if (
+        (world[ny][nx].type === "wumpus" &&
+          !removedWumpus.find((v) => v.y === ny && v.x === nx)) ||
+        world[ny][nx].type === "pitch"
+      ) {
         setPlayer((player) => ({
           ...player,
           x: 1,
@@ -101,6 +107,27 @@ export function useGame() {
       if (player.y === 1 && player.x === 1) {
         if (player.gold >= 1) {
           setGameState({ type: "ended" });
+        }
+      }
+    } else if (action === "Shoot") {
+      if (player.arrow > 0) {
+        let ny = player.y;
+        let nx = player.x;
+
+        while (world[ny][nx].type !== "wall") {
+          const [dy, dx] = dirNext[player.direction];
+          ny += dy;
+          nx += dx;
+
+          if (world[ny][nx].type === "wumpus") {
+            setLast((last) => ({ ...last, scream: true }));
+            setRemovedWumpus((removedWumpus) => [
+              ...removedWumpus,
+              { y: ny, x: nx },
+            ]);
+            setPlayer((player) => ({ ...player, arrow: player.arrow - 1 }));
+            break;
+          }
         }
       }
     }

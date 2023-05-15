@@ -1,24 +1,7 @@
 import { atom } from "jotai";
 import { atomWithReset } from "jotai/utils";
 import { constant, times } from "lodash-es";
-
-type WorldCell = {
-  type: "none" | "gold" | "wumpus" | "pitch" | "wall";
-};
-
-export type World = WorldCell[][];
-
-export const worldData = atomWithReset<World>([
-  times(6, () => ({ type: "wall" as const })),
-  ...times(4, () => [
-    { type: "wall" as const },
-    ...times(4, () => ({
-      type: "none" as const,
-    })),
-    { type: "wall" as const },
-  ]),
-  times(6, () => ({ type: "wall" as const })),
-]);
+import { worldData } from "./world";
 
 export const worldDiscovered = atomWithReset(
   times(6, () => times(6, constant(false)))
@@ -44,6 +27,8 @@ export const lastEvent = atom({
   bump: false,
   scream: false,
 });
+
+export const removedWumpusAtom = atom<{ x: number; y: number }[]>([]);
 
 export const playerPercept = atom((get) => {
   const { x, y } = get(playerData);
