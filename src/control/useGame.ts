@@ -10,6 +10,7 @@ import {
   lastEvent,
   playerPercept,
 } from "../states";
+import { gameStateAtom } from "../states/game";
 
 const dirCycle = ["E", "S", "W", "N"] as const;
 const dirNext = {
@@ -28,8 +29,13 @@ export function useGame() {
   const [player, setPlayer] = useAtom(playerData);
   const [, setLast] = useAtom(lastEvent);
   const percept = useAtomValue(playerPercept);
+  const [gameState, setGameState] = useAtom(gameStateAtom);
 
   function runAgent() {
+    if (gameState.type === "idle") {
+      return;
+    }
+
     const nextAction = agent.run(percept);
 
     processAction(nextAction);
@@ -91,12 +97,19 @@ export function useGame() {
       if (world[player.y][player.x].type === "gold") {
         setPlayer((player) => ({ ...player, gold: 1 }));
       }
+    } else if (action === "Climb") {
+      if (player.y === 1 && player.x === 1) {
+        if (player.gold >= 1) {
+          setGameState({ type: "ended" });
+        }
+      }
     }
   }
 
   function reset() {
     resetWorld();
     resetDiscovered();
+
     setWorld((world) => {
       const newWorld = cloneDeep(world);
 
@@ -138,6 +151,8 @@ export function useGame() {
       newDiscovered[1][1] = true;
       return newDiscovered;
     });
+
+    setGameState({ type: "running" });
   }
 
   return { runAgent, reset, processAction, player };

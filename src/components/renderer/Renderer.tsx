@@ -2,8 +2,12 @@ import { Canvas } from "@react-three/fiber";
 import { BakeShadows, Bounds, OrbitControls } from "@react-three/drei";
 import { WorldMap } from "./WorldMap";
 import { Player } from "./Player";
+import { useAtomValue } from "jotai";
+import { gameStateAtom } from "../../states/game";
 
 export function Renderer() {
+  const gameState = useAtomValue(gameStateAtom);
+
   return (
     <Canvas dpr={[1, 2]} camera={{ position: [20, 20, 20] }} shadows>
       <color attach="background" args={["#252530"]} />
@@ -25,7 +29,7 @@ export function Renderer() {
         {/* <RoundedBox args={[10, 10, 10]} position={[0, 0, 0]} receiveShadow>
           <meshStandardMaterial roughness={1} opacity={1} color="#D6DBE0" />
         </RoundedBox> */}
-        <Player />
+        {gameState.type !== "idle" && gameState.type !== "ended" && <Player />}
       </Bounds>
 
       <BakeShadows />
