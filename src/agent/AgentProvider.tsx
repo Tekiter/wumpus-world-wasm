@@ -76,6 +76,9 @@ export function AgentProvider({
               [...o.entries()].map(([k, v]) => [k, convertToObj(v)])
             );
           }
+          if (o instanceof Array) {
+            return o.map((item) => convertToObj(item));
+          }
           return o;
         }
 
