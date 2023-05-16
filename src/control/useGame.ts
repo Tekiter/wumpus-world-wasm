@@ -12,6 +12,7 @@ import {
 } from "../states";
 import { gameStateAtom } from "../states/game";
 import { worldData } from "../states/world";
+import { gameHistoryAtom } from "../states/history";
 
 const dirCycle = ["E", "S", "W", "N"] as const;
 const dirNext = {
@@ -32,6 +33,7 @@ export function useGame() {
   const [, setLast] = useAtom(lastEvent);
   const percept = useAtomValue(playerPercept);
   const [gameState, setGameState] = useAtom(gameStateAtom);
+  const [, setGameHistory] = useAtom(gameHistoryAtom);
 
   function runAgent() {
     if (gameState.type === "idle") {
@@ -39,6 +41,11 @@ export function useGame() {
     }
 
     const nextAction = agent.run(percept);
+
+    setGameHistory((gameHistory) => [
+      ...gameHistory,
+      { type: "agentReasoning", action: nextAction, percept },
+    ]);
 
     processAction(nextAction);
   }
@@ -70,6 +77,8 @@ export function useGame() {
           !removedWumpus.find((v) => v.y === ny && v.x === nx)) ||
         world[ny][nx].type === "pitch"
       ) {
+        const type = world[ny][nx].type;
+
         setPlayer((player) => ({
           ...player,
           x: 1,
@@ -78,6 +87,12 @@ export function useGame() {
           direction: "E",
           arrow: 2,
         }));
+
+        setGameHistory((history) => [
+          ...history,
+          { type: "dead", reason: type },
+        ]);
+
         agent.dead();
         return;
       }
@@ -133,6 +148,9 @@ export function useGame() {
   function reset() {
     resetWorld();
     resetDiscovered();
+    setRemovedWumpus([]);
+    setLast({ bump: false, scream: false });
+    setGameHistory([]);
 
     setWorld((world) => {
       const newWorld = cloneDeep(world);
@@ -177,6 +195,8 @@ export function useGame() {
     });
 
     setGameState({ type: "running", mode: "manual" });
+
+    agent.resetMemory();
   }
 
   return { runAgent, reset, processAction, player };
