@@ -5,7 +5,7 @@ type GameState =
       type: "idle";
     }
   | { type: "running"; mode: "autoplay" | "manual" }
-  | { type: "ended" };
+  | { type: "ended"; reason: "exited" | "noExit" };
 
 export const gameStateAtom = atom<GameState>({
   type: "idle",

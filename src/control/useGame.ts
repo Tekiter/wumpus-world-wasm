@@ -129,7 +129,7 @@ export function useGame() {
     } else if (action === "Climb") {
       if (player.y === 1 && player.x === 1) {
         if (player.gold >= 1) {
-          setGameState({ type: "ended" });
+          setGameState({ type: "ended", reason: "exited" });
         }
       }
     } else if (action === "Shoot") {
@@ -150,6 +150,8 @@ export function useGame() {
           setPlayer((player) => ({ ...player, arrow: player.arrow - 1 }));
         }
       }
+    } else if (action === "NoExit") {
+      setGameState({ type: "ended", reason: "noExit" });
     }
   }
 

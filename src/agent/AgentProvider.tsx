@@ -48,6 +48,7 @@ export function AgentProvider({
           z.literal("Grab"),
           z.literal("Shoot"),
           z.literal("Climb"),
+          z.literal("NoExit"),
         ]);
 
         const result = actionSchema.safeParse(action);
@@ -55,7 +56,7 @@ export function AgentProvider({
         if (result.success) {
           receivedAction = result.data;
         } else {
-          throw new Error(`Invalid agent action: ${action}`);
+          errorThrown = `${action}은 올바른 Action이 아닙니다. `;
         }
       },
       getPercept() {

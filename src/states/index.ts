@@ -73,7 +73,8 @@ export type PlayerAction = [
   "Grab",
   "Shoot",
   "Climb",
-  "None"
+  "None",
+  "NoExit"
 ][number];
 
 export const actionQueue = atom<PlayerAction[]>([]);
