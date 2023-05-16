@@ -114,20 +114,17 @@ export function useGame() {
         let ny = player.y;
         let nx = player.x;
 
-        while (world[ny][nx].type !== "wall") {
-          const [dy, dx] = dirNext[player.direction];
-          ny += dy;
-          nx += dx;
+        const [dy, dx] = dirNext[player.direction];
+        ny += dy;
+        nx += dx;
 
-          if (world[ny][nx].type === "wumpus") {
-            setLast((last) => ({ ...last, scream: true }));
-            setRemovedWumpus((removedWumpus) => [
-              ...removedWumpus,
-              { y: ny, x: nx },
-            ]);
-            setPlayer((player) => ({ ...player, arrow: player.arrow - 1 }));
-            break;
-          }
+        if (world[ny][nx].type === "wumpus") {
+          setLast((last) => ({ ...last, scream: true }));
+          setRemovedWumpus((removedWumpus) => [
+            ...removedWumpus,
+            { y: ny, x: nx },
+          ]);
+          setPlayer((player) => ({ ...player, arrow: player.arrow - 1 }));
         }
       }
     }
