@@ -25,7 +25,7 @@ export function useGame() {
   const agent = useAgent();
   const [world, setWorld] = useAtom(worldData);
   const resetWorld = useResetAtom(worldData);
-  const [discovered, setDiscovered] = useAtom(worldDiscovered);
+  const [, setDiscovered] = useAtom(worldDiscovered);
   const [removedWumpus, setRemovedWumpus] = useAtom(removedWumpusAtom);
   const resetDiscovered = useResetAtom(worldDiscovered);
   const [player, setPlayer] = useAtom(playerData);
