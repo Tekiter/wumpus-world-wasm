@@ -3,7 +3,7 @@ import { Renderer } from "./components/renderer/Renderer";
 
 function App() {
   return (
-    <div className="absolute inset-0">
+    <div className="h-screen">
       <div className="flex justify-stretch h-full">
         <div className="grow shrink h-full relative">
           <div className="bg-stone-300 absolute inset-0">

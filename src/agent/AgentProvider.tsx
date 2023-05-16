@@ -8,9 +8,10 @@ import { PlayerAction } from "../states";
 
 interface AgentProviderProps {
   children: ReactNode;
+  onPythonError?(message: string): void;
 }
 
-export function AgentProvider({ children }: AgentProviderProps) {
+export function AgentProvider({ children, onPythonError }: AgentProviderProps) {
   const pyVm = usePyVm();
   const agentMemory = useRef<unknown>(undefined);
   const isLastDead = useRef<boolean>(false);
@@ -68,7 +69,7 @@ export function AgentProvider({ children }: AgentProviderProps) {
         return isLastDead.current;
       },
       sendPythonError(err) {
-        console.log(err);
+        onPythonError?.(`${err}`);
       },
     } satisfies Bridge);
 
