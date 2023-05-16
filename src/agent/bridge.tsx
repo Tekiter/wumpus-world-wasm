@@ -4,6 +4,7 @@ export interface Bridge {
   setMemory(memory: unknown): void;
   getPercept(): Percept;
   isLastDead(): boolean;
+  sendPythonError(err: unknown): void;
 }
 
 export type Percept = {

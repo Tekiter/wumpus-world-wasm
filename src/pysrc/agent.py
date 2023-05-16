@@ -12,5 +12,7 @@ def dead(memory):
 def reasoning(memory, percept):
     memory["a"] += 1
 
+    x
+
     return "GoForward"
     

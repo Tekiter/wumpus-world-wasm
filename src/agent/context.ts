@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { Percept } from "../bridge";
+import { Percept } from "./bridge";
 import { PlayerAction } from "../states";
 
 interface AgentContext {

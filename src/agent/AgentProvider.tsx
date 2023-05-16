@@ -1,5 +1,5 @@
 import { ReactNode, useRef } from "react";
-import { Bridge, Percept } from "../bridge";
+import { Bridge, Percept } from "./bridge";
 import { usePyVm } from "../pyVm/usePyVm";
 import { mainpy } from "../pysrc";
 import { AgentContext } from "./context";
@@ -66,6 +66,9 @@ export function AgentProvider({ children }: AgentProviderProps) {
       },
       isLastDead() {
         return isLastDead.current;
+      },
+      sendPythonError(err) {
+        console.log(err);
       },
     } satisfies Bridge);
 
