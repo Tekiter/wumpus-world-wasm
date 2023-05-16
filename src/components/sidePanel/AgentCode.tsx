@@ -11,7 +11,6 @@ export function AgentCode() {
 
   function handleSubmit(newCode: string) {
     setAgentCode(newCode);
-    console.log("SAVE!", newCode);
   }
 
   return (
