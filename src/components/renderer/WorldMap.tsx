@@ -2,6 +2,7 @@ import { useAtomValue } from "jotai";
 import { playerData, removedWumpusAtom, worldDiscovered } from "../../states";
 import { CELL_SIZE, getGridPosition } from "./position";
 import { worldData } from "../../states/world";
+import { WumpusModel } from "../model/Wumpus";
 
 export function WorldMap() {
   const world = useAtomValue(worldData);
@@ -25,10 +26,12 @@ export function WorldMap() {
           }
 
           const wumpus = (
-            <mesh position={[0, 1, 0]}>
-              <boxGeometry args={[1, 1, 1]} />
-              <meshStandardMaterial color={"red"} />
-            </mesh>
+            <group>
+              <WumpusModel
+                rotation={[0, Math.PI / 2 + Math.PI / 4, 0]}
+                scale={1.1}
+              />
+            </group>
           );
 
           const pitch = (
