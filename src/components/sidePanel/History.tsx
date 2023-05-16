@@ -34,9 +34,15 @@ export function History(props: { className?: string }) {
               </div>
             )}
             {entry.type === "error" && (
-              <div className="px-3 py-2 ">
-                <h2>ERROR</h2>
+              <div className="px-3 py-2 bg-red10">
+                <h2>Error</h2>
                 <p>{entry.message}</p>
+              </div>
+            )}
+            {entry.type === "agentPrint" && (
+              <div className="px-3 py-2 ">
+                <h3 className="text-xs text-gray-500">Agent Print</h3>
+                <div>{entry.message}</div>
               </div>
             )}
           </div>

@@ -5,16 +5,25 @@ import { mainpy } from "../pysrc";
 import { AgentContext } from "./context";
 import { z } from "zod";
 import { PlayerAction } from "../states";
+import { useAtomValue } from "jotai";
+import { agentCodeAtom } from "../states/agentCode";
 
 interface AgentProviderProps {
   children: ReactNode;
-  onPythonError?(message: string): void;
+  onAgentError?(message: string): void;
+  onAgentPrint?(message: string): void;
 }
 
-export function AgentProvider({ children, onPythonError }: AgentProviderProps) {
+export function AgentProvider({
+  children,
+  onAgentError,
+  onAgentPrint,
+}: AgentProviderProps) {
   const pyVm = usePyVm();
   const agentMemory = useRef<unknown>(undefined);
   const isLastDead = useRef<boolean>(false);
+
+  const agentpy = useAtomValue(agentCodeAtom);
 
   function runAgent(percept: Percept) {
     if (!pyVm) {
@@ -22,6 +31,13 @@ export function AgentProvider({ children, onPythonError }: AgentProviderProps) {
     }
 
     let receivedAction: PlayerAction = "None";
+    let errorThrown: string | null = "";
+
+    if (onAgentPrint) {
+      pyVm.setStdout(onAgentPrint);
+    }
+
+    pyVm.injectModule("agent", agentpy);
 
     pyVm.injectJSModule("bridge", {
       sendAction(action) {
@@ -69,14 +85,20 @@ export function AgentProvider({ children, onPythonError }: AgentProviderProps) {
         return isLastDead.current;
       },
       sendPythonError(err) {
-        onPythonError?.(`${err}`);
+        console.error("[PythonError]", err);
+        errorThrown = `${err}`;
+        onAgentError?.(`${err}`);
       },
     } satisfies Bridge);
 
     pyVm.exec(mainpy);
     isLastDead.current = false;
 
-    return receivedAction;
+    if (errorThrown) {
+      return { status: "error", message: errorThrown } as const;
+    }
+
+    return { status: "success", action: receivedAction } as const;
   }
 
   function dead() {

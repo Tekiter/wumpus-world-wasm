@@ -17,6 +17,10 @@ type HistoryCell =
       message: string;
     }
   | {
+      type: "agentPrint";
+      message: string;
+    }
+  | {
       type: "dead";
       reason: string;
     };

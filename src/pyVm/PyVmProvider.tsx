@@ -1,7 +1,6 @@
 import { ReactNode, useEffect, useState } from "react";
 import init, { VirtualMachine, vmStore } from "./rustpython/rustpython_wasm";
 import wasmUrl from "./rustpython/rustpython_wasm_bg.wasm?url";
-import agentpy from "../pysrc/agent.py?raw";
 import { PyVmContext } from "./context";
 
 interface PyVmProviderProps {
@@ -18,8 +17,6 @@ export function PyVmProvider({ children }: PyVmProviderProps) {
       vm = vmStore.init("webpy");
       vm.setStdout((str: unknown) => console.log("[PythonOutput]:", str));
       vm.addToScope("__name__", "__main__");
-
-      vm.injectModule("agent", agentpy);
 
       setPyVm(vm);
     });

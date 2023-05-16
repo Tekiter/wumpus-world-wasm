@@ -3,7 +3,11 @@ import { Percept } from "./bridge";
 import { PlayerAction } from "../states";
 
 interface AgentContext {
-  run(percept: Percept): PlayerAction;
+  run(
+    percept: Percept
+  ):
+    | { status: "success"; action: PlayerAction }
+    | { status: "error"; message: string };
   dead(): void;
   resetMemory(): void;
 }

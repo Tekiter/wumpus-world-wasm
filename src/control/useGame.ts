@@ -40,14 +40,22 @@ export function useGame() {
       return;
     }
 
-    const nextAction = agent.run(percept);
+    const agentResult = agent.run(percept);
+
+    if (agentResult.status === "error") {
+      setGameHistory((history) => [
+        ...history,
+        { type: "error", message: agentResult.message },
+      ]);
+      return;
+    }
 
     setGameHistory((gameHistory) => [
       ...gameHistory,
-      { type: "agentReasoning", action: nextAction, percept },
+      { type: "agentReasoning", action: agentResult.action, percept },
     ]);
 
-    processAction(nextAction);
+    processAction(agentResult.action);
   }
 
   function processAction(action: PlayerAction) {

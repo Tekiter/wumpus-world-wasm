@@ -4,6 +4,7 @@ import { useAtom } from "jotai";
 import { useRef, useState } from "react";
 import Editor from "@monaco-editor/react";
 import { agentCodeAtom } from "../../states/agentCode";
+import agentpy from "../../pysrc/agent.py?raw";
 
 export function AgentCode() {
   const [agentCode, setAgentCode] = useAtom(agentCodeAtom);
@@ -44,8 +45,9 @@ const CodeEditorModal = (props: {
 
   function handleReset() {
     if (confirm("정말 agent.py 의 내용을 초기값으로 바꿀까요?")) {
-      editorRef.current?.setValue(props.value);
+      editorRef.current?.setValue(agentpy);
       setEdited(false);
+      props.onSubmit(agentpy);
     }
   }
 
