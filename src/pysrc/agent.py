@@ -4,8 +4,8 @@ def initialize(memory):
     memory['actions'] = ["GoForward", "TurnLeft", "GoForward", "TurnLeft", "GoForward", "TurnLeft"]
     memory['idx'] = 0
     
-def dead(memory):
-    print("DEAD!")
+def dead(memory, reason):
+    print("DEAD!: " + reason)
 
 def reasoning(memory, percept):
     idx = memory['idx']

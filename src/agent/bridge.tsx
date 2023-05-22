@@ -3,7 +3,7 @@ export interface Bridge {
   getMemory(): unknown;
   setMemory(memory: unknown): void;
   getPercept(): Percept;
-  isLastDead(): boolean;
+  getLastDead(): null | string;
   sendPythonError(err: unknown): void;
 }
 

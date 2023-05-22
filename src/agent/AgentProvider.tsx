@@ -21,7 +21,7 @@ export function AgentProvider({
 }: AgentProviderProps) {
   const pyVm = usePyVm();
   const agentMemory = useRef<unknown>(undefined);
-  const isLastDead = useRef<boolean>(false);
+  const lastDead = useRef<null | string>(null);
 
   const agentpy = useAtomValue(agentCodeAtom);
 
@@ -85,8 +85,8 @@ export function AgentProvider({
         const newMemory = convertToObj(memory);
         agentMemory.current = newMemory;
       },
-      isLastDead() {
-        return isLastDead.current;
+      getLastDead() {
+        return lastDead.current;
       },
       sendPythonError(err) {
         console.error("[PythonError]", err);
@@ -96,7 +96,7 @@ export function AgentProvider({
     } satisfies Bridge);
 
     pyVm.exec(mainpy);
-    isLastDead.current = false;
+    lastDead.current = null;
 
     if (errorThrown) {
       return { status: "error", message: errorThrown } as const;
@@ -105,8 +105,8 @@ export function AgentProvider({
     return { status: "success", action: receivedAction } as const;
   }
 
-  function dead() {
-    isLastDead.current = true;
+  function dead(reason: string) {
+    lastDead.current = reason;
   }
 
   function resetMemory() {

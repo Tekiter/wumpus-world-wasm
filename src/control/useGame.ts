@@ -101,7 +101,7 @@ export function useGame() {
           { type: "dead", reason: type },
         ]);
 
-        agent.dead();
+        agent.dead(type);
         return;
       }
 

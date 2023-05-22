@@ -8,7 +8,7 @@ interface AgentContext {
   ):
     | { status: "success"; action: PlayerAction }
     | { status: "error"; message: string };
-  dead(): void;
+  dead(reason: string): void;
   resetMemory(): void;
 }
 
