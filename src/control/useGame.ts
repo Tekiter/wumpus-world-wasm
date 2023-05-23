@@ -101,6 +101,8 @@ export function useGame() {
           { type: "dead", reason: type },
         ]);
 
+        setRemovedWumpus([]);
+
         agent.dead(type);
         return;
       }
