@@ -24,11 +24,8 @@ export function Renderer() {
         shadow-bias={0.00005}
       />
 
-      <Bounds fit clip observe margin={2}>
+      <Bounds fit clip observe margin={1.5}>
         <WorldMap />
-        {/* <RoundedBox args={[10, 10, 10]} position={[0, 0, 0]} receiveShadow>
-          <meshStandardMaterial roughness={1} opacity={1} color="#D6DBE0" />
-        </RoundedBox> */}
         {gameState.type !== "idle" && gameState.type !== "ended" && <Player />}
       </Bounds>
 

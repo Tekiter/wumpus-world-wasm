@@ -69,18 +69,16 @@ export function useGame() {
       const ny = player.y + dy;
       const nx = player.x + dx;
 
-      if (world[ny][nx].type === "wall") {
-        setLast((last) => ({ ...last, bump: true }));
-        return;
-      }
-
       setDiscovered((discovered) => {
         const newDiscovered = cloneDeep(discovered);
         newDiscovered[ny][nx] = true;
         return newDiscovered;
       });
 
-      if (
+      if (world[ny][nx].type === "wall") {
+        setLast((last) => ({ ...last, bump: true }));
+        return;
+      } else if (
         (world[ny][nx].type === "wumpus" &&
           !removedWumpus.find((v) => v.y === ny && v.x === nx)) ||
         world[ny][nx].type === "pitch"
