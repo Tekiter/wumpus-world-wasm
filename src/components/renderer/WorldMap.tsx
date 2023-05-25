@@ -4,12 +4,24 @@ import { playerData, removedWumpusAtom, worldDiscovered } from "../../states";
 import { CELL_SIZE, getGridPosition } from "./position";
 import { worldData } from "../../states/world";
 import { WumpusModel } from "../model/Wumpus";
+import { Coin } from "./Coin";
+import { useRef } from "react";
+import { Group } from "three";
+import { useFrame } from "@react-three/fiber";
 
 export function WorldMap() {
   const world = useAtomValue(worldData);
   const removedWumpus = useAtomValue(removedWumpusAtom);
   const discovered = useAtomValue(worldDiscovered);
   const player = useAtomValue(playerData);
+
+  const coinRef = useRef<Group>(null);
+
+  useFrame(({ clock }) => {
+    if (coinRef.current) {
+      coinRef.current.rotateY(((Math.PI * clock.elapsedTime) / 100000) * 2);
+    }
+  });
 
   const wumpus = (
     <group>
@@ -25,10 +37,13 @@ export function WorldMap() {
   );
 
   const gold = (
-    <mesh position={[0, 1, 0]} castShadow>
-      <boxGeometry args={[1, 1, 1]} />
-      <meshStandardMaterial color={"yellow"} />
-    </mesh>
+    <group ref={coinRef} rotation={[0, Math.PI / 2, 0]}>
+      {/* <mesh position={[0, 1, 0]} castShadow>
+        <boxGeometry args={[1, 1, 1]} />
+        <meshStandardMaterial color={"yellow"} />
+      </mesh> */}
+      <Coin position={[-2, 1.3, -2]} scale={0.25} />
+    </group>
   );
 
   return (
