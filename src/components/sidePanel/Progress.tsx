@@ -13,7 +13,7 @@ export function Progress() {
   useEffect(() => {
     const tm = setInterval(() => {
       runFn.current?.();
-    }, 1000);
+    }, 500);
 
     return () => {
       clearInterval(tm);
