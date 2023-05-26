@@ -16,13 +16,14 @@ export function Renderer() {
       <spotLight
         castShadow
         color="#d9dcc0"
-        intensity={2}
+        intensity={1.5}
         position={[-50, 50, 40]}
         angle={0.25}
         penumbra={1}
         shadow-mapSize={[128, 128]}
         shadow-bias={0.00005}
       />
+      <directionalLight color="#b1c1da" intensity={0.5} position={[3, 2, 3]} />
 
       <Bounds fit clip observe margin={1.5}>
         <WorldMap />

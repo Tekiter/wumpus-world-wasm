@@ -19,7 +19,7 @@ export function WorldMap() {
 
   useFrame(({ clock }) => {
     if (coinRef.current) {
-      coinRef.current.rotateY(((Math.PI * clock.elapsedTime) / 100000) * 2);
+      coinRef.current.rotation.y = (Math.PI / 10) * 5 * clock.getElapsedTime();
     }
   });
 
@@ -38,10 +38,6 @@ export function WorldMap() {
 
   const gold = (
     <group ref={coinRef} rotation={[0, Math.PI / 2, 0]}>
-      {/* <mesh position={[0, 1, 0]} castShadow>
-        <boxGeometry args={[1, 1, 1]} />
-        <meshStandardMaterial color={"yellow"} />
-      </mesh> */}
       <Coin position={[-2, 1.3, -2]} scale={0.25} />
     </group>
   );
