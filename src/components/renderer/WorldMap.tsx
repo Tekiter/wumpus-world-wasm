@@ -5,7 +5,7 @@ import { CELL_SIZE, getGridPosition } from "./position";
 import { worldData } from "../../states/world";
 import { WumpusModel } from "../model/Wumpus";
 import { Coin } from "./Coin";
-import { useRef } from "react";
+import { Suspense, useRef } from "react";
 import { Group } from "three";
 import { useFrame } from "@react-three/fiber";
 
@@ -69,11 +69,13 @@ export function WorldMap() {
                   animate={{ color: discovered[y][x] ? "#c9c9c9" : "#6c6c6c" }}
                 />
               </mesh>
-              {cell.type === "wumpus" &&
-                !removedWumpus.find((v) => v.y === y && v.x === x) &&
-                wumpus}
-              {cell.type === "pitch" && pitch}
-              {cell.type === "gold" && player.gold === 0 && gold}
+              <Suspense>
+                {cell.type === "wumpus" &&
+                  !removedWumpus.find((v) => v.y === y && v.x === x) &&
+                  wumpus}
+                {cell.type === "pitch" && pitch}
+                {cell.type === "gold" && player.gold === 0 && gold}
+              </Suspense>
             </group>
           );
         })

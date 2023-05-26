@@ -4,6 +4,7 @@ import { WorldMap } from "./WorldMap";
 import { Player } from "./Player";
 import { useAtomValue } from "jotai";
 import { gameStateAtom } from "../../states/game";
+import { Suspense } from "react";
 
 export function Renderer() {
   const gameState = useAtomValue(gameStateAtom);
