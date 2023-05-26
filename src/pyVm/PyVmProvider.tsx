@@ -14,7 +14,7 @@ export function PyVmProvider({ children }: PyVmProviderProps) {
     let vm: VirtualMachine;
 
     init(wasmUrl).then(() => {
-      vm = vmStore.init("webpy");
+      vm = vmStore.init("webpy", false);
       vm.setStdout((str: unknown) => console.log("[PythonOutput]:", str));
       vm.addToScope("__name__", "__main__");
 
