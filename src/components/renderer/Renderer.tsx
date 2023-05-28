@@ -27,8 +27,12 @@ export function Renderer() {
       <directionalLight color="#b1c1da" intensity={0.5} position={[3, 2, 3]} />
 
       <Bounds fit clip observe margin={1.5}>
-        <WorldMap />
-        {gameState.type !== "idle" && gameState.type !== "ended" && <Player />}
+        <Suspense fallback={null}>
+          <WorldMap />
+          {gameState.type !== "idle" && gameState.type !== "ended" && (
+            <Player />
+          )}
+        </Suspense>
       </Bounds>
 
       <BakeShadows />
